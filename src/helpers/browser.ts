@@ -132,7 +132,7 @@ export const killBrowser = async (
 const getBrowserInstance = async (
   launchArgs: PuppeteerNodeLaunchOptions,
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  noSandbox: boolean,
+  _noSandbox: boolean,
 ): Promise<{ chrome: LaunchedChrome | undefined; browser: Browser }> => {
   const browser = await getLocalBrowserInstance(
     launchArgs,
