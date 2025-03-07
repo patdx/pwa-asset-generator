@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0](https://github.com/patdx/pwa-asset-generator/compare/v6.4.0...v7.0.0) (2025-03-07)
+
+
+* feat!: migrate to ESM and improve image generation ([41124fa](https://github.com/patdx/pwa-asset-generator/commit/41124fa9d3970f583cbd855cb46cd87b106dec2f))
+
+
+### Bug Fixes
+
+* update repository URL and related links to reflect fork ([6348afe](https://github.com/patdx/pwa-asset-generator/commit/6348afee061dc6430f87cb495d7327887360c279))
+
+
+### BREAKING CHANGES
+
+* This release requires a Node.js version with ESM support.
+* Puppeteer is no longer bundled - system Chromium is required instead.
+* Image generation process has changed from parallel to sequential.
+
 # [6.4.0](https://github.com/elegantapp/pwa-asset-generator/compare/v6.3.2...v6.4.0) (2024-10-26)
 
 
