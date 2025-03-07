@@ -34,7 +34,7 @@ describe('CLI', () => {
 
   test('does not have any conflicting shorthand options', () => {
     const flagShorthands = Object.values(constants.FLAGS).map(
-      (flag) => flag.alias,
+      (flag) => flag.shortFlag,
     )
     expect(new Set(flagShorthands).size).toBe(flagShorthands.length)
   })
