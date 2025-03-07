@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/patdx/pwa-asset-generator/compare/v7.0.0...v7.1.0) (2025-03-07)
+
+
+### Features
+
+* add publishConfig to make package public ([039748a](https://github.com/patdx/pwa-asset-generator/commit/039748a2ea989532cede0e58f862a869d179cb9f))
+
 # [7.0.0](https://github.com/patdx/pwa-asset-generator/compare/v6.4.0...v7.0.0) (2025-03-07)
 
 
