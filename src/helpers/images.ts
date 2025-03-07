@@ -1,9 +1,9 @@
-import uniqWith from 'lodash.uniqwith';
-import isEqual from 'lodash.isequal';
-import constants from '../config/constants';
-import { Image, Orientation } from '../models/image';
-import { LaunchScreenSpec } from '../models/spec';
-import { Options } from '../models/options';
+import uniqWith from 'lodash.uniqwith'
+import isEqual from 'lodash.isequal'
+import constants from '../config/constants'
+import { Image, Orientation } from '../models/image'
+import { LaunchScreenSpec } from '../models/spec'
+import { Options } from '../models/options'
 
 const mapToIconImageFileObj = (
   fileNamePrefix: string,
@@ -15,7 +15,7 @@ const mapToIconImageFileObj = (
   height: height ?? width,
   orientation: null,
   scaleFactor: 1,
-});
+})
 
 const mapToImageFileObj = (
   fileNamePrefix: string,
@@ -29,7 +29,7 @@ const mapToImageFileObj = (
   height,
   scaleFactor,
   orientation,
-});
+})
 
 const getIconImages = (options: Options): Image[] => {
   let icons = [
@@ -39,7 +39,7 @@ const getIconImages = (options: Options): Image[] => {
     ...constants.MANIFEST_ICON_SIZES.map((size) =>
       mapToIconImageFileObj(constants.MANIFEST_ICON_FILENAME_PREFIX, size),
     ),
-  ];
+  ]
 
   if (options.favicon) {
     icons = [
@@ -47,7 +47,7 @@ const getIconImages = (options: Options): Image[] => {
       ...constants.FAVICON_SIZES.map((size) =>
         mapToIconImageFileObj(constants.FAVICON_FILENAME_PREFIX, size),
       ),
-    ];
+    ]
   }
 
   if (options.mstile) {
@@ -59,30 +59,30 @@ const getIconImages = (options: Options): Image[] => {
             constants.MS_ICON_FILENAME_PREFIX,
             size.width,
             size.height,
-          );
+          )
         }
 
-        return mapToIconImageFileObj(constants.MS_ICON_FILENAME_PREFIX, size);
+        return mapToIconImageFileObj(constants.MS_ICON_FILENAME_PREFIX, size)
       }),
-    ];
+    ]
   }
 
-  return uniqWith(icons, isEqual);
-};
+  return uniqWith(icons, isEqual)
+}
 
 const getSplashScreenImages = (
   splashScreenData: LaunchScreenSpec[],
   options: Options,
 ): Image[] => {
-  let appleSplashFilenamePrefix = constants.APPLE_SPLASH_FILENAME_PREFIX;
+  let appleSplashFilenamePrefix = constants.APPLE_SPLASH_FILENAME_PREFIX
   if (options.darkMode) {
     appleSplashFilenamePrefix +=
-      constants.APPLE_SPLASH_FILENAME_DARK_MODE_POSTFIX;
+      constants.APPLE_SPLASH_FILENAME_DARK_MODE_POSTFIX
   }
 
   return uniqWith(
     splashScreenData.reduce((acc: Image[], curr: LaunchScreenSpec) => {
-      let images: Image[] = acc;
+      let images: Image[] = acc
 
       if (!options.landscapeOnly) {
         images = [
@@ -94,7 +94,7 @@ const getSplashScreenImages = (
             curr.scaleFactor,
             'portrait',
           ),
-        ];
+        ]
       }
       if (!options.portraitOnly) {
         images = [
@@ -106,15 +106,15 @@ const getSplashScreenImages = (
             curr.scaleFactor,
             'landscape',
           ),
-        ];
+        ]
       }
-      return images;
+      return images
     }, []),
     isEqual,
-  );
-};
+  )
+}
 
 export default {
   getIconImages,
   getSplashScreenImages,
-};
+}

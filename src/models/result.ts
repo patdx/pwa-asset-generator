@@ -1,5 +1,5 @@
-import { SavedImage } from './image';
-import { HTMLMeta } from './meta';
+import { SavedImage } from './image'
+import { HTMLMeta } from './meta'
 
 export interface ManifestJsonIcon {
   /**
@@ -8,7 +8,7 @@ export interface ManifestJsonIcon {
    @tutorial https://www.w3.org/TR/appmanifest/#dom-imageresource-src
    @example //icons.example.com/lowres
    */
-  src: string;
+  src: string
 
   /**
    A string consisting of an unordered set of unique space-separated tokens
@@ -16,7 +16,7 @@ export interface ManifestJsonIcon {
    @tutorial https://www.w3.org/TR/appmanifest/#sizes-member
    @example 192x192
    */
-  sizes?: string;
+  sizes?: string
 
   /**
    Media type of the image
@@ -25,7 +25,7 @@ export interface ManifestJsonIcon {
    @tutorial https://www.w3.org/TR/appmanifest/#dom-imageresource-type
    @example image/png
    */
-  type?: string;
+  type?: string
 
   /**
    When an ImageResource is used as an icon, a developer can hint that
@@ -34,14 +34,14 @@ export interface ManifestJsonIcon {
    @tutorial https://www.w3.org/TR/appmanifest/#dfn-icon-purposes
    @default any
    */
-  purpose?: string;
+  purpose?: string
 
   /**
    The platform member represents the platform to which a containing object applies
 
    @tutorial https://github.com/w3c/manifest/wiki/Platforms
    */
-  platform?: 'chrome_web_store' | 'play' | 'itunes' | 'windows';
+  platform?: 'chrome_web_store' | 'play' | 'itunes' | 'windows'
 }
 
 export interface Result {
@@ -68,7 +68,7 @@ export interface Result {
    }]
    ```
    */
-  savedImages: SavedImage[];
+  savedImages: SavedImage[]
 
   /**
    Meta tags to be added to index.html file
@@ -84,7 +84,7 @@ export interface Result {
    }
    ```
    */
-  htmlMeta: HTMLMeta;
+  htmlMeta: HTMLMeta
 
   /**
    Icons to be added to manifest.json's icons property
@@ -103,5 +103,5 @@ export interface Result {
    }]
    ```
    */
-  manifestJsonContent: ManifestJsonIcon[];
+  manifestJsonContent: ManifestJsonIcon[]
 }

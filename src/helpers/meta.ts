@@ -1,13 +1,13 @@
-import * as cheerio from 'cheerio';
-import pretty from 'pretty';
-import { lookup } from 'mime-types';
-import path from 'path';
-import constants from '../config/constants';
-import file from './file';
-import { SavedImage } from '../models/image';
-import { ManifestJsonIcon } from '../models/result';
-import { Options } from '../models/options';
-import { HTMLMeta, HTMLMetaNames, HTMLMetaSelector } from '../models/meta';
+import * as cheerio from 'cheerio'
+import pretty from 'pretty'
+import { lookup } from 'mime-types'
+import path from 'path'
+import constants from '../config/constants'
+import file from './file'
+import { SavedImage } from '../models/image'
+import { ManifestJsonIcon } from '../models/result'
+import { Options } from '../models/options'
+import { HTMLMeta, HTMLMetaNames, HTMLMetaSelector } from '../models/meta'
 
 const generateOutputPath = (
   options: Options,
@@ -19,25 +19,25 @@ const generateOutputPath = (
     pathOverride,
     index: indexHtmlPath,
     manifest: manifestJsonPath,
-  } = options;
+  } = options
 
   const outputFilePath = (
     isManifest ? manifestJsonPath : indexHtmlPath
-  ) as string;
+  ) as string
 
   if (pathOverride !== undefined) {
-    return `${pathOverride}/${path.parse(imagePath).base}`;
+    return `${pathOverride}/${path.parse(imagePath).base}`
   }
 
   if (pathPrefix && !isManifest) {
     return `${pathPrefix}/${file.getRelativeImagePath(
       outputFilePath,
       imagePath,
-    )}`;
+    )}`
   }
 
-  return file.getRelativeImagePath(outputFilePath, imagePath);
-};
+  return file.getRelativeImagePath(outputFilePath, imagePath)
+}
 
 const generateIconsContentForManifest = (
   savedImages: SavedImage[],
@@ -52,16 +52,16 @@ const generateIconsContentForManifest = (
         src: generateOutputPath(options, imagePath),
         sizes: `${width}x${height}`,
         type: `image/${file.getExtension(imagePath)}`,
-      };
+      }
       if (!options.maskable) {
-        return curr.concat(icon);
+        return curr.concat(icon)
       }
       return curr.concat([
         { ...icon, purpose: 'any' },
         { ...icon, purpose: 'maskable' },
-      ]);
-    }, [] as ManifestJsonIcon[]);
-};
+      ])
+    }, [] as ManifestJsonIcon[])
+}
 
 const generateAppleTouchIconHtml = (
   savedImages: SavedImage[],
@@ -77,8 +77,8 @@ const generateAppleTouchIconHtml = (
         options.xhtml,
       ),
     )
-    .join('');
-};
+    .join('')
+}
 
 const generateFaviconHtml = (
   savedImages: SavedImage[],
@@ -94,8 +94,8 @@ const generateFaviconHtml = (
         options.xhtml,
       ),
     )
-    .join('');
-};
+    .join('')
+}
 
 const generateMsTileImageHtml = (
   savedImages: SavedImage[],
@@ -110,8 +110,8 @@ const generateMsTileImageHtml = (
         options.xhtml,
       ),
     )
-    .join('');
-};
+    .join('')
+}
 
 const generateAppleLaunchImageHtml = (
   savedImages: SavedImage[],
@@ -133,8 +133,8 @@ const generateAppleLaunchImageHtml = (
         options.xhtml,
       ),
     )
-    .join('');
-};
+    .join('')
+}
 
 const generateHtmlForIndexPage = (
   savedImages: SavedImage[],
@@ -145,31 +145,29 @@ const generateHtmlForIndexPage = (
       options.xhtml ? ' /' : ''
     }>
 `,
-  };
+  }
 
   if (!options.splashOnly) {
     if (options.favicon) {
       htmlMeta[HTMLMetaNames.favicon] = `${generateFaviconHtml(
         savedImages,
         options,
-      )}`;
+      )}`
     }
 
     htmlMeta[HTMLMetaNames.appleTouchIcon] = `${generateAppleTouchIconHtml(
       savedImages,
       options,
-    )}`;
+    )}`
   }
 
   if (!options.iconOnly) {
     if (options.darkMode) {
-      htmlMeta[
-        HTMLMetaNames.appleLaunchImageDarkMode
-      ] = `${generateAppleLaunchImageHtml(savedImages, options, true)}`;
+      htmlMeta[HTMLMetaNames.appleLaunchImageDarkMode] =
+        `${generateAppleLaunchImageHtml(savedImages, options, true)}`
     } else {
-      htmlMeta[
-        HTMLMetaNames.appleLaunchImage
-      ] = `${generateAppleLaunchImageHtml(savedImages, options, false)}`;
+      htmlMeta[HTMLMetaNames.appleLaunchImage] =
+        `${generateAppleLaunchImageHtml(savedImages, options, false)}`
     }
   }
 
@@ -177,38 +175,38 @@ const generateHtmlForIndexPage = (
     htmlMeta[HTMLMetaNames.msTileImage] = `${generateMsTileImageHtml(
       savedImages,
       options,
-    )}`;
+    )}`
   }
 
   if (options.singleQuotes) {
     Object.keys(htmlMeta).forEach((metaKey: string) => {
-      const metaContent = htmlMeta[metaKey as keyof HTMLMeta];
+      const metaContent = htmlMeta[metaKey as keyof HTMLMeta]
       if (metaContent) {
-        metaContent.replace(/"/gm, "'");
+        metaContent.replace(/"/gm, "'")
       }
-    });
-    return htmlMeta;
+    })
+    return htmlMeta
   }
 
-  return htmlMeta;
-};
+  return htmlMeta
+}
 
 const addIconsToManifest = async (
   manifestContent: ManifestJsonIcon[],
   manifestJsonFilePath: string,
 ): Promise<void> => {
   if (!(await file.isPathAccessible(manifestJsonFilePath, file.WRITE_ACCESS))) {
-    throw Error(`Cannot write to manifest json file ${manifestJsonFilePath}`);
+    throw Error(`Cannot write to manifest json file ${manifestJsonFilePath}`)
   }
 
   const manifestJson = JSON.parse(
     (await file.readFile(manifestJsonFilePath)) as unknown as string,
-  );
+  )
 
   const newManifestContent = {
     ...manifestJson,
     icons: [...manifestContent],
-  };
+  }
 
   if (manifestJson.icons) {
     newManifestContent.icons = [
@@ -217,14 +215,14 @@ const addIconsToManifest = async (
         (icon: ManifestJsonIcon) =>
           !manifestContent.some((man) => man.sizes === icon.sizes),
       ),
-    ];
+    ]
   }
 
   return file.writeFile(
     manifestJsonFilePath,
     JSON.stringify(newManifestContent, null, 2),
-  );
-};
+  )
+}
 
 const formatMetaTags = (htmlMeta: HTMLMeta): string => {
   return constants.HTML_META_ORDERED_SELECTOR_LIST.reduce(
@@ -232,13 +230,13 @@ const formatMetaTags = (htmlMeta: HTMLMeta): string => {
       if (htmlMeta.hasOwnProperty(meta.name)) {
         return `\
 ${acc}
-${htmlMeta[meta.name]}`;
+${htmlMeta[meta.name]}`
       }
-      return acc;
+      return acc
     },
     '',
-  );
-};
+  )
+}
 
 const addMetaTagsToIndexPage = async (
   htmlMeta: HTMLMeta,
@@ -246,39 +244,39 @@ const addMetaTagsToIndexPage = async (
   xhtml: boolean,
 ): Promise<void> => {
   if (!(await file.isPathAccessible(indexHtmlFilePath, file.WRITE_ACCESS))) {
-    throw Error(`Cannot write to index html file ${indexHtmlFilePath}`);
+    throw Error(`Cannot write to index html file ${indexHtmlFilePath}`)
   }
 
-  const indexHtmlFile = await file.readFile(indexHtmlFilePath);
+  const indexHtmlFile = await file.readFile(indexHtmlFilePath)
   const $ = cheerio.load(indexHtmlFile, {
     // decodeEntities: false,
     xmlMode: xhtml,
-  });
+  })
 
-  const HEAD_SELECTOR = 'head';
+  const HEAD_SELECTOR = 'head'
   const hasElement = (selector: string): boolean => {
-    return $(selector).length > 0;
-  };
+    return $(selector).length > 0
+  }
 
   const hasDarkModeElement = (): boolean => {
     const darkModeMeta = constants.HTML_META_ORDERED_SELECTOR_LIST.find(
       (m: HTMLMetaSelector) =>
         m.name === HTMLMetaNames.appleLaunchImageDarkMode,
-    );
+    )
     if (darkModeMeta) {
-      return $(darkModeMeta.selector).length > 0;
+      return $(darkModeMeta.selector).length > 0
     }
-    return false;
-  };
+    return false
+  }
 
   // TODO: Find a way to remove tags without leaving newlines behind
   constants.HTML_META_ORDERED_SELECTOR_LIST.forEach(
     (meta: HTMLMetaSelector) => {
       if (htmlMeta.hasOwnProperty(meta.name) && htmlMeta[meta.name] !== '') {
-        const content = `${htmlMeta[meta.name]}`;
+        const content = `${htmlMeta[meta.name]}`
 
         if (hasElement(meta.selector)) {
-          $(meta.selector).remove();
+          $(meta.selector).remove()
         }
 
         // Because meta tags with dark mode media attr has to be declared after the regular splash screen meta tags
@@ -286,16 +284,16 @@ const addMetaTagsToIndexPage = async (
           meta.name === HTMLMetaNames.appleLaunchImage &&
           hasDarkModeElement()
         ) {
-          $(HEAD_SELECTOR).prepend(`\n${content}`);
+          $(HEAD_SELECTOR).prepend(`\n${content}`)
         } else {
-          $(HEAD_SELECTOR).append(`${content}\n`);
+          $(HEAD_SELECTOR).append(`${content}\n`)
         }
       }
     },
-  );
+  )
 
-  return file.writeFile(indexHtmlFilePath, pretty($.html(), { ocd: true }));
-};
+  return file.writeFile(indexHtmlFilePath, pretty($.html(), { ocd: true }))
+}
 
 export default {
   formatMetaTags,
@@ -304,4 +302,4 @@ export default {
   generateHtmlForIndexPage,
   generateBrowserConfigXml: generateMsTileImageHtml,
   generateIconsContentForManifest,
-};
+}

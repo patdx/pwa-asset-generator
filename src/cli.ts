@@ -1,8 +1,8 @@
-import meow from 'meow';
-import constants from './config/constants';
-import preLogger from './helpers/logger';
-import { generateImages } from './main';
-import { CLIOptions } from './models/options';
+import meow from 'meow'
+import constants from './config/constants'
+import preLogger from './helpers/logger'
+import { generateImages } from './main'
+import { CLIOptions } from './models/options'
 
 const cli = meow(
   `
@@ -76,20 +76,20 @@ $ pwa-asset-generator --help
     importMeta: import.meta,
     flags: constants.FLAGS,
   },
-);
+)
 
-const flags = cli.flags as CLIOptions;
-const logger = preLogger('cli', flags);
+const flags = cli.flags as CLIOptions
+const logger = preLogger('cli', flags)
 
-(async (): Promise<void> => {
+;(async (): Promise<void> => {
   try {
     if (cli.input[0] === undefined) {
-      cli.showHelp(0);
+      cli.showHelp(0)
     }
-    await generateImages(cli.input[0], cli.input[1], flags, logger);
-    process.exit(0);
+    await generateImages(cli.input[0], cli.input[1], flags, logger)
+    process.exit(0)
   } catch (e) {
-    logger.error(e as Error);
-    process.exit(1);
+    logger.error(e as Error)
+    process.exit(1)
   }
-})();
+})()

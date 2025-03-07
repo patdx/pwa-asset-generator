@@ -1,14 +1,14 @@
-import fs from 'fs';
-import path from 'path';
-import slash from 'slash';
-import { lookup } from 'mime-types';
-import { promisify } from 'util';
-import constants from '../config/constants';
-import { Extension, Options } from '../models/options';
+import fs from 'fs'
+import path from 'path'
+import slash from 'slash'
+import { lookup } from 'mime-types'
+import { promisify } from 'util'
+import constants from '../config/constants'
+import { Extension, Options } from '../models/options'
 
 const getExtension = (file: string): string => {
-  return path.extname(file).replace('.', '');
-};
+  return path.extname(file).replace('.', '')
+}
 
 const isImageFile = (file: string): boolean => {
   return [
@@ -25,30 +25,30 @@ const isImageFile = (file: string): boolean => {
     'png',
     'svg',
     'webp',
-  ].includes(getExtension(file));
-};
+  ].includes(getExtension(file))
+}
 
 const isHtmlFile = (file: string): boolean => {
-  return ['html', 'htm'].includes(getExtension(file));
-};
+  return ['html', 'htm'].includes(getExtension(file))
+}
 
 const convertBackslashPathToSlashPath = (backSlashPath: string): string => {
-  return slash(backSlashPath);
-};
+  return slash(backSlashPath)
+}
 
 const getAppDir = (): string => {
-  let appPath;
+  let appPath
   try {
-    appPath = require.resolve('pwa-asset-generator');
+    appPath = require.resolve('pwa-asset-generator')
   } catch (e) {
-    appPath = (require.main as NodeModule).filename;
+    appPath = (require.main as NodeModule).filename
   }
-  return path.join(path.dirname(appPath), '..');
-};
+  return path.join(path.dirname(appPath), '..')
+}
 
 const getShellHtmlFilePath = (): string => {
-  return `${getAppDir()}/static/shell.html`;
-};
+  return `${getAppDir()}/static/shell.html`
+}
 
 const getImageSavePath = (
   imageName: string,
@@ -59,33 +59,33 @@ const getImageSavePath = (
 ): string => {
   const getMaskablePrefix = (): '.maskable' | '' => {
     if (!isMaskableIcon) {
-      return '';
+      return ''
     }
     if (maskable) {
-      return '.maskable';
+      return '.maskable'
     }
-    return '';
-  };
+    return ''
+  }
   return convertBackslashPathToSlashPath(
     path.join(outputFolder, `${imageName}${getMaskablePrefix()}.${ext}`),
-  );
-};
+  )
+}
 
 const fileUrl = (filePath: string): string => {
-  let pathName = filePath;
-  pathName = pathName.replace(/\\/g, '/');
+  let pathName = filePath
+  pathName = pathName.replace(/\\/g, '/')
 
   // Windows drive letter must be prefixed with a slash
   if (pathName[0] !== '/') {
-    pathName = `/${pathName}`;
+    pathName = `/${pathName}`
   }
 
-  return encodeURI(`file://${pathName}`).replace(/[?#]/g, encodeURIComponent);
-};
+  return encodeURI(`file://${pathName}`).replace(/[?#]/g, encodeURIComponent)
+}
 
 const getFileUrlOfPath = (source: string): string => {
-  return fileUrl(path.resolve(source));
-};
+  return fileUrl(path.resolve(source))
+}
 
 const getRelativeFilePath = (
   referenceFilePath: string,
@@ -94,8 +94,8 @@ const getRelativeFilePath = (
   return path.relative(
     path.dirname(path.resolve(referenceFilePath)),
     path.resolve(filePath),
-  );
-};
+  )
+}
 
 const getRelativeImagePath = (
   outputFilePath: string,
@@ -104,40 +104,40 @@ const getRelativeImagePath = (
   if (outputFilePath) {
     return convertBackslashPathToSlashPath(
       getRelativeFilePath(outputFilePath, imagePath),
-    );
+    )
   }
-  return convertBackslashPathToSlashPath(imagePath);
-};
+  return convertBackslashPathToSlashPath(imagePath)
+}
 
 const getImageBase64Url = (imagePath: string): string => {
   return `data:${lookup(imagePath)};base64,${fs.readFileSync(imagePath, {
     encoding: 'base64',
-  })}`;
-};
+  })}`
+}
 
 const getHtmlShell = (
   imagePath: string,
   options: Options,
   isUrl: boolean,
 ): string => {
-  const imageUrl = isUrl ? imagePath : getImageBase64Url(imagePath);
+  const imageUrl = isUrl ? imagePath : getImageBase64Url(imagePath)
 
   return `${constants.SHELL_HTML_FOR_LOGO(
     imageUrl,
     options.padding,
     options.background,
-  )}`;
-};
+  )}`
+}
 
 const isPathAccessible = (
   filePath: string,
   mode?: number | undefined,
-): Promise<boolean> => promisify(fs.access)(filePath, mode).then(() => true);
+): Promise<boolean> => promisify(fs.access)(filePath, mode).then(() => true)
 
 const makeDirRecursiveSync = (dirPath: string): string => {
-  fs.mkdirSync(dirPath, { recursive: true });
-  return dirPath;
-};
+  fs.mkdirSync(dirPath, { recursive: true })
+  return dirPath
+}
 
 export default {
   convertBackslashPathToSlashPath,
@@ -165,4 +165,4 @@ export default {
   makeDirRecursiveSync,
   READ_ACCESS: fs.constants.R_OK,
   WRITE_ACCESS: fs.constants.W_OK,
-};
+}

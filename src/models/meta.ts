@@ -8,15 +8,15 @@ export enum HTMLMetaNames {
 }
 
 export interface HTMLMeta {
-  [HTMLMetaNames.favicon]?: string;
-  [HTMLMetaNames.appleTouchIcon]?: string;
-  [HTMLMetaNames.appleMobileWebAppCapable]: string;
-  [HTMLMetaNames.appleLaunchImage]?: string;
-  [HTMLMetaNames.appleLaunchImageDarkMode]?: string;
-  [HTMLMetaNames.msTileImage]?: string;
+  [HTMLMetaNames.favicon]?: string
+  [HTMLMetaNames.appleTouchIcon]?: string
+  [HTMLMetaNames.appleMobileWebAppCapable]: string
+  [HTMLMetaNames.appleLaunchImage]?: string
+  [HTMLMetaNames.appleLaunchImageDarkMode]?: string
+  [HTMLMetaNames.msTileImage]?: string
 }
 
 export interface HTMLMetaSelector {
-  name: keyof HTMLMeta;
-  selector: string;
+  name: keyof HTMLMeta
+  selector: string
 }

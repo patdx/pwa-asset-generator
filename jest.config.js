@@ -1,4 +1,4 @@
-const forceExit = !!process.env.FORCE_EXIT;
+const forceExit = !!process.env.FORCE_EXIT
 
 module.exports = {
   roots: ['<rootDir>/src'],
@@ -9,4 +9,4 @@ module.exports = {
   setupFilesAfterEnv: ['./jest.setup.js'],
   cacheDirectory: '.jest-cache',
   forceExit,
-};
+}

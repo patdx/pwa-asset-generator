@@ -1,6 +1,6 @@
-import { Orientation } from '../models/image';
-import { HTMLMetaNames, HTMLMetaSelector } from '../models/meta';
-import APPLE_HIG_SPLASH_SCREEN_FALLBACK_DATA from './apple-fallback-data.json';
+import { Orientation } from '../models/image'
+import { HTMLMetaNames, HTMLMetaSelector } from '../models/meta'
+import APPLE_HIG_SPLASH_SCREEN_FALLBACK_DATA from './apple-fallback-data.json'
 
 const HTML_META_ORDERED_SELECTOR_LIST: HTMLMetaSelector[] = [
   {
@@ -29,7 +29,7 @@ const HTML_META_ORDERED_SELECTOR_LIST: HTMLMetaSelector[] = [
     selector:
       'link[rel="apple-touch-startup-image"][media^="(prefers-color-scheme: dark)"]',
   },
-];
+]
 
 export default {
   FLAGS: {
@@ -283,7 +283,7 @@ export default {
       }px) and (-webkit-device-pixel-ratio: ${scaleFactor}) and (orientation: ${orientation})"${
         xhtml ? ' /' : ''
       }>
-`;
+`
     }
 
     // As weird as it gets, Apple expects same device width and height values from portrait orientation, for landscape
@@ -295,9 +295,9 @@ export default {
     }px) and (-webkit-device-pixel-ratio: ${scaleFactor}) and (orientation: ${orientation})"${
       xhtml ? ' /' : ''
     }>
-`;
+`
     /* eslint-enable */
   },
 
   APPLE_HIG_SPLASH_SCREEN_FALLBACK_DATA,
-};
+}

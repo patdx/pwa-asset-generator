@@ -1,4 +1,4 @@
-import * as esbuild from 'esbuild';
+import * as esbuild from 'esbuild'
 
 await esbuild.build({
   entryPoints: ['src/main.ts', 'src/cli.ts'],
@@ -9,4 +9,4 @@ await esbuild.build({
   format: 'esm',
   packages: 'external',
   splitting: true,
-});
+})

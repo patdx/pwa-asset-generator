@@ -1,19 +1,19 @@
-import path from 'path';
-import { generateImages } from './main';
-import file from './helpers/file';
-import constants from './config/constants';
-import { ManifestJsonIcon, Result } from './models/result';
-import { CLIOptions } from './models/options';
-import { HTMLMetaNames } from './models/meta';
-import { SavedImage } from './models/image';
+import path from 'path'
+import { generateImages } from './main'
+import file from './helpers/file'
+import constants from './config/constants'
+import { ManifestJsonIcon, Result } from './models/result'
+import { CLIOptions } from './models/options'
+import { HTMLMetaNames } from './models/meta'
+import { SavedImage } from './models/image'
 
 const generateTempImages = (
   options: CLIOptions,
   source = './static/logo.png',
   output = './temp',
 ): Promise<Result> => {
-  return generateImages(source, output, options);
-};
+  return generateImages(source, output, options)
+}
 
 describe('generates images with', () => {
   test('icons only', async () => {
@@ -21,20 +21,20 @@ describe('generates images with', () => {
       scrape: false,
       iconOnly: true,
       log: false,
-    });
+    })
 
-    expect(result).toMatchSnapshot();
-  });
+    expect(result).toMatchSnapshot()
+  })
 
   test('splash screens only', async () => {
     const result = await generateTempImages({
       scrape: false,
       splashOnly: true,
       log: false,
-    });
+    })
 
-    expect(result).toMatchSnapshot();
-  });
+    expect(result).toMatchSnapshot()
+  })
 
   test('portrait splash screens only', async () => {
     const result = await generateTempImages({
@@ -42,10 +42,10 @@ describe('generates images with', () => {
       splashOnly: true,
       portraitOnly: true,
       log: false,
-    });
+    })
 
-    expect(result).toMatchSnapshot();
-  });
+    expect(result).toMatchSnapshot()
+  })
 
   test('landscape splash screens only', async () => {
     const result = await generateTempImages({
@@ -53,10 +53,10 @@ describe('generates images with', () => {
       splashOnly: true,
       landscapeOnly: true,
       log: false,
-    });
+    })
 
-    expect(result).toMatchSnapshot();
-  });
+    expect(result).toMatchSnapshot()
+  })
 
   test('icons and splash screens when both only flags exist', async () => {
     const result = await generateTempImages({
@@ -64,11 +64,11 @@ describe('generates images with', () => {
       iconOnly: true,
       splashOnly: true,
       log: false,
-    });
+    })
 
-    expect(result).toMatchSnapshot();
-  });
-});
+    expect(result).toMatchSnapshot()
+  })
+})
 
 describe('generates meta', () => {
   describe('resulting an output with', () => {
@@ -77,10 +77,10 @@ describe('generates meta', () => {
         scrape: false,
         path: '%PUBLIC_URL%',
         log: false,
-      });
+      })
 
-      expect(result).toMatchSnapshot();
-    });
+      expect(result).toMatchSnapshot()
+    })
 
     test('favicon html', async () => {
       const result = await generateTempImages({
@@ -88,10 +88,10 @@ describe('generates meta', () => {
         iconOnly: true,
         favicon: true,
         log: false,
-      });
+      })
 
-      expect(result).toMatchSnapshot();
-    });
+      expect(result).toMatchSnapshot()
+    })
 
     test('mstile static tile image html', async () => {
       const result = await generateTempImages({
@@ -99,10 +99,10 @@ describe('generates meta', () => {
         iconOnly: true,
         mstile: true,
         log: false,
-      });
+      })
 
-      expect(result).toMatchSnapshot();
-    });
+      expect(result).toMatchSnapshot()
+    })
 
     test('dark mode splash screen html', async () => {
       const result = await generateTempImages({
@@ -112,10 +112,10 @@ describe('generates meta', () => {
         quality: 80,
         darkMode: true,
         log: false,
-      });
+      })
 
-      expect(result).toMatchSnapshot();
-    });
+      expect(result).toMatchSnapshot()
+    })
 
     test('jpg extension', async () => {
       const result = await generateTempImages({
@@ -123,11 +123,11 @@ describe('generates meta', () => {
         favicon: true,
         type: 'jpg',
         log: false,
-      });
+      })
 
-      expect(result).toMatchSnapshot();
-    });
-  });
+      expect(result).toMatchSnapshot()
+    })
+  })
 
   describe('saving meta to manifest.json', () => {
     const ICONS_MOCK = [
@@ -141,7 +141,7 @@ describe('generates meta', () => {
         sizes: '32x32',
         type: 'image/png',
       },
-    ];
+    ]
 
     const MANIFEST_JSON_MOCK = {
       name: 'Mock App',
@@ -149,7 +149,7 @@ describe('generates meta', () => {
       scope: '/',
       description: 'Mock for testing',
       icons: ICONS_MOCK,
-    };
+    }
 
     const saveImagesToManifest = (): Promise<Result> =>
       generateTempImages({
@@ -157,53 +157,53 @@ describe('generates meta', () => {
         iconOnly: true,
         log: false,
         manifest: './temp/manifest.json',
-      });
+      })
 
     const saveManifest = (manifestMock: {
-      name: string;
-      display: string;
-      scope: string;
-      description: string;
-      icons?: { src: string; sizes: string; type: string }[];
+      name: string
+      display: string
+      scope: string
+      description: string
+      icons?: { src: string; sizes: string; type: string }[]
     }): Promise<void> => {
       return file.writeFile(
         './temp/manifest.json',
         JSON.stringify(manifestMock),
-      );
-    };
+      )
+    }
 
     const readManifest = (): Promise<{ icons: ManifestJsonIcon[] }> =>
       file
         .readFile('./temp/manifest.json')
-        .then((resp) => JSON.parse(resp as unknown as string));
+        .then((resp) => JSON.parse(resp as unknown as string))
 
     test('creating icons array', async () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { icons, ...manifestJsonMock } = MANIFEST_JSON_MOCK;
-      await saveManifest(manifestJsonMock);
-      await saveImagesToManifest();
+      const { icons, ...manifestJsonMock } = MANIFEST_JSON_MOCK
+      await saveManifest(manifestJsonMock)
+      await saveImagesToManifest()
 
-      const manifestJson = await readManifest();
+      const manifestJson = await readManifest()
 
-      expect(manifestJson.icons).toBeDefined();
-      expect(manifestJson.icons.length).toBe(4);
-    });
+      expect(manifestJson.icons).toBeDefined()
+      expect(manifestJson.icons.length).toBe(4)
+    })
 
     test('extending icons array', async () => {
-      await saveManifest(MANIFEST_JSON_MOCK);
-      await saveImagesToManifest();
+      await saveManifest(MANIFEST_JSON_MOCK)
+      await saveImagesToManifest()
 
-      const manifestJson = await readManifest();
+      const manifestJson = await readManifest()
 
       ICONS_MOCK.forEach((icon: ManifestJsonIcon) => {
         expect(
           manifestJson.icons.find(
             (ic: ManifestJsonIcon) => ic.src === icon.src,
           ),
-        ).toBeDefined();
-      });
-      expect(manifestJson.icons.length).toBe(6);
-    });
+        ).toBeDefined()
+      })
+      expect(manifestJson.icons.length).toBe(6)
+    })
 
     test('replacing items with target size in icons array', async () => {
       const ICONS_TO_BE_REPLACED_MOCK = [
@@ -217,37 +217,37 @@ describe('generates meta', () => {
           sizes: '512x512',
           type: 'image/png',
         },
-      ];
+      ]
       await saveManifest({
         ...MANIFEST_JSON_MOCK,
         icons: ICONS_TO_BE_REPLACED_MOCK,
-      });
-      await saveImagesToManifest();
+      })
+      await saveImagesToManifest()
 
-      const manifestJson = await readManifest();
+      const manifestJson = await readManifest()
 
       ICONS_TO_BE_REPLACED_MOCK.forEach((icon: ManifestJsonIcon) => {
         expect(
           manifestJson.icons.find(
             (ic: ManifestJsonIcon) => ic.src === icon.src,
           ),
-        ).toBeUndefined();
-      });
-      expect(manifestJson.icons.length).toBe(4);
-    });
+        ).toBeUndefined()
+      })
+      expect(manifestJson.icons.length).toBe(4)
+    })
 
     test('using a path override', async () => {
-      const pathOverride = './my-custom-path-override';
+      const pathOverride = './my-custom-path-override'
       const result = await generateTempImages({
         scrape: false,
         iconOnly: true,
         log: false,
         pathOverride,
         manifest: './temp/manifest.json',
-      });
+      })
 
-      expect(result).toMatchSnapshot();
-    });
+      expect(result).toMatchSnapshot()
+    })
 
     test('disabling maskable icons', async () => {
       const result = await generateTempImages({
@@ -256,26 +256,26 @@ describe('generates meta', () => {
         log: false,
         maskable: false,
         manifest: './temp/manifest.json',
-      });
+      })
 
-      expect(result).toMatchSnapshot();
-    });
-  });
+      expect(result).toMatchSnapshot()
+    })
+  })
 
   describe('saving meta to index.html', () => {
     const saveIndex = (): Promise<void> => {
       return file.writeFile(
         './temp/index.html',
         constants.SHELL_HTML_FOR_LOGO('test.png', '10px', 'white'),
-      );
-    };
+      )
+    }
 
     const readIndex = (): Promise<Buffer | string> =>
-      file.readFile('./temp/index.html', { encoding: 'utf8' });
+      file.readFile('./temp/index.html', { encoding: 'utf8' })
 
     beforeEach(async () => {
-      await saveIndex();
-    });
+      await saveIndex()
+    })
 
     describe('creating a favicon meta', () => {
       test('with html output', async () => {
@@ -285,15 +285,15 @@ describe('generates meta', () => {
           iconOnly: true,
           log: false,
           index: './temp/index.html',
-        });
+        })
 
-        const savedIndex = await readIndex();
+        const savedIndex = await readIndex()
 
         expect(savedIndex).toContain(
           result.htmlMeta[HTMLMetaNames.appleMobileWebAppCapable],
-        );
-        expect(savedIndex).toContain(result.htmlMeta[HTMLMetaNames.favicon]);
-      });
+        )
+        expect(savedIndex).toContain(result.htmlMeta[HTMLMetaNames.favicon])
+      })
 
       test('with xhtml output', async () => {
         const result = await generateTempImages({
@@ -302,11 +302,11 @@ describe('generates meta', () => {
           iconOnly: true,
           log: false,
           xhtml: true,
-        });
+        })
 
-        expect(result).toMatchSnapshot();
-      });
-    });
+        expect(result).toMatchSnapshot()
+      })
+    })
 
     describe('creating apple icons meta', () => {
       test('with html output', async () => {
@@ -315,17 +315,17 @@ describe('generates meta', () => {
           iconOnly: true,
           log: false,
           index: './temp/index.html',
-        });
+        })
 
-        const savedIndex = await readIndex();
+        const savedIndex = await readIndex()
 
         expect(savedIndex).toContain(
           result.htmlMeta[HTMLMetaNames.appleMobileWebAppCapable],
-        );
+        )
         expect(savedIndex).toContain(
           result.htmlMeta[HTMLMetaNames.appleTouchIcon],
-        );
-      });
+        )
+      })
 
       test('with xhtml output', async () => {
         const result = await generateTempImages({
@@ -333,11 +333,11 @@ describe('generates meta', () => {
           iconOnly: true,
           log: false,
           xhtml: true,
-        });
+        })
 
-        expect(result).toMatchSnapshot();
-      });
-    });
+        expect(result).toMatchSnapshot()
+      })
+    })
 
     describe('creating splash screens meta', () => {
       const assertEntriesInHTMLOutput = (
@@ -346,7 +346,7 @@ describe('generates meta', () => {
       ) =>
         expectedOutput
           .split('\n')
-          .forEach((entry) => expect(output).toContain(entry.trim()));
+          .forEach((entry) => expect(output).toContain(entry.trim()))
 
       // eslint-disable-next-line jest/expect-expect
       test('with default html output', async () => {
@@ -355,20 +355,20 @@ describe('generates meta', () => {
           splashOnly: true,
           log: false,
           index: './temp/index.html',
-        });
+        })
 
-        const savedIndex = (await readIndex()) as string;
+        const savedIndex = (await readIndex()) as string
 
         assertEntriesInHTMLOutput(
           savedIndex,
           result.htmlMeta[HTMLMetaNames.appleMobileWebAppCapable],
-        );
+        )
 
         assertEntriesInHTMLOutput(
           savedIndex,
           result.htmlMeta[HTMLMetaNames.appleLaunchImage] as string,
-        );
-      });
+        )
+      })
 
       // eslint-disable-next-line jest/expect-expect
       test('with dark mode html output', async () => {
@@ -377,7 +377,7 @@ describe('generates meta', () => {
           splashOnly: true,
           log: false,
           index: './temp/index.html',
-        });
+        })
 
         const resultDark = await generateTempImages({
           scrape: false,
@@ -385,25 +385,25 @@ describe('generates meta', () => {
           darkMode: true,
           log: false,
           index: './temp/index.html',
-        });
+        })
 
-        const savedIndex = (await readIndex()) as string;
+        const savedIndex = (await readIndex()) as string
 
         assertEntriesInHTMLOutput(
           savedIndex,
           resultLight.htmlMeta[HTMLMetaNames.appleMobileWebAppCapable],
-        );
+        )
 
         assertEntriesInHTMLOutput(
           savedIndex,
           resultLight.htmlMeta[HTMLMetaNames.appleLaunchImage] as string,
-        );
+        )
 
         assertEntriesInHTMLOutput(
           savedIndex,
           resultDark.htmlMeta[HTMLMetaNames.appleLaunchImageDarkMode] as string,
-        );
-      });
+        )
+      })
 
       test('with xhtml output', async () => {
         const result = await generateTempImages({
@@ -411,64 +411,64 @@ describe('generates meta', () => {
           splashOnly: true,
           log: false,
           xhtml: true,
-        });
+        })
 
-        expect(result).toMatchSnapshot();
-      });
-    });
+        expect(result).toMatchSnapshot()
+      })
+    })
 
     test('using a path override', async () => {
-      const pathOverride = './my-custom-path-override';
+      const pathOverride = './my-custom-path-override'
       const result = await generateTempImages({
         scrape: false,
         favicon: true,
         pathOverride,
         log: false,
         index: './temp/index.html',
-      });
+      })
 
-      const savedIndex = await readIndex();
+      const savedIndex = await readIndex()
 
-      expect(savedIndex).toContain(pathOverride);
-      expect(result).toMatchSnapshot();
-    });
-  });
-});
+      expect(savedIndex).toContain(pathOverride)
+      expect(result).toMatchSnapshot()
+    })
+  })
+})
 
 describe('visually compares generated images with', () => {
-  const pixelmatch = require('pixelmatch');
-  const { PNG } = require('pngjs');
-  const JPEG = require('jpeg-js');
+  const pixelmatch = require('pixelmatch')
+  const { PNG } = require('pngjs')
+  const JPEG = require('jpeg-js')
 
   interface VisualDiffResult {
-    numDiffPixels: number;
-    diff: boolean;
-    width: number;
-    height: number;
+    numDiffPixels: number
+    diff: boolean
+    width: number
+    height: number
   }
 
   interface MatchResult {
-    path: string;
-    looksSame: boolean;
+    path: string
+    looksSame: boolean
   }
 
   const getVisualDiff = (
     fileAPath: string,
     fileBPath: string,
   ): VisualDiffResult => {
-    const isPNG = fileAPath.endsWith('.png');
-    let imgA;
-    let imgB;
+    const isPNG = fileAPath.endsWith('.png')
+    let imgA
+    let imgB
 
     if (isPNG) {
-      imgA = PNG.sync.read(file.readFileSync(fileAPath));
-      imgB = PNG.sync.read(file.readFileSync(fileBPath));
+      imgA = PNG.sync.read(file.readFileSync(fileAPath))
+      imgB = PNG.sync.read(file.readFileSync(fileBPath))
     } else {
-      imgA = JPEG.decode(file.readFileSync(fileAPath));
-      imgB = JPEG.decode(file.readFileSync(fileBPath));
+      imgA = JPEG.decode(file.readFileSync(fileAPath))
+      imgB = JPEG.decode(file.readFileSync(fileBPath))
     }
-    const { width, height } = imgA;
-    const diff = new PNG({ width, height });
+    const { width, height } = imgA
+    const diff = new PNG({ width, height })
 
     const numDiffPixels = pixelmatch(
       imgA.data,
@@ -479,81 +479,81 @@ describe('visually compares generated images with', () => {
       {
         threshold: 0.7,
       },
-    );
+    )
 
     return {
       numDiffPixels,
       diff,
       width,
       height,
-    };
-  };
+    }
+  }
 
   const saveVisualDiff = (
     filePath: string,
     diffFileBuffer: Buffer,
     testSuite: string,
   ) => {
-    const savedFileParsedPath = path.parse(filePath);
+    const savedFileParsedPath = path.parse(filePath)
 
-    file.makeDirRecursiveSync(`./temp/diff/${testSuite}`);
+    file.makeDirRecursiveSync(`./temp/diff/${testSuite}`)
     file.writeFileSync(
       `./temp/diff/${testSuite}/diff-${savedFileParsedPath.name}.png`,
       diffFileBuffer,
-    );
+    )
     file.copyFileSync(
       filePath,
       `./temp/diff/${testSuite}/${savedFileParsedPath.base}`,
-    );
-  };
+    )
+  }
 
   const doFilesLookSimilar = (
     fileAPath: string,
     fileBPath: string,
     testSuite: string,
   ): boolean => {
-    const visualDiff = getVisualDiff(fileAPath, fileBPath);
-    const acceptablePixedDiff = 0.25 * visualDiff.width * visualDiff.height;
+    const visualDiff = getVisualDiff(fileAPath, fileBPath)
+    const acceptablePixedDiff = 0.25 * visualDiff.width * visualDiff.height
 
     if (visualDiff.numDiffPixels >= acceptablePixedDiff) {
       /* eslint-disable no-console */
-      console.log(`There's a diff between file ${fileAPath} and ${fileBPath}`);
-      console.log(`numDiffPixels: ${visualDiff.numDiffPixels}`);
+      console.log(`There's a diff between file ${fileAPath} and ${fileBPath}`)
+      console.log(`numDiffPixels: ${visualDiff.numDiffPixels}`)
       /* eslint-enable no-console */
 
       saveVisualDiff(
         fileAPath,
         PNG.sync.write(visualDiff.diff, { colorType: 6 }),
         testSuite,
-      );
+      )
     }
 
-    return visualDiff.numDiffPixels < acceptablePixedDiff;
-  };
+    return visualDiff.numDiffPixels < acceptablePixedDiff
+  }
 
   const getAllSnapshotsMatchStatus = async (
     result: Result,
     testSuite: string,
   ): Promise<MatchResult[]> => {
-    const SNAPSHOT_PATH = './src/__snapshots__/visual';
+    const SNAPSHOT_PATH = './src/__snapshots__/visual'
     const snapshots = await file.getFilesInDir(
       path.join(SNAPSHOT_PATH, testSuite),
-    );
+    )
 
     return result.savedImages.map((savedImage: SavedImage) => {
       const matchedSnapshot = snapshots.find(
         (snapshot: string) =>
           path.parse(snapshot).name === path.parse(savedImage.path).name,
-      );
+      )
 
-      let looksSame = true;
+      let looksSame = true
 
       try {
         looksSame = doFilesLookSimilar(
           savedImage.path,
           path.join(SNAPSHOT_PATH, testSuite, matchedSnapshot as string),
           testSuite,
-        );
+        )
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(
@@ -563,25 +563,25 @@ describe('visually compares generated images with', () => {
           testSuite,
           matchedSnapshot as string,
           testSuite,
-        );
-        throw error;
+        )
+        throw error
       }
 
       if (!looksSame) {
         // eslint-disable-next-line no-console
-        console.log('looksSame failed on', savedImage.path);
+        console.log('looksSame failed on', savedImage.path)
       }
 
       return {
         path: savedImage.path,
         looksSame,
-      };
-    });
-  };
+      }
+    })
+  }
 
   describe('using a local input', () => {
     test('in png format', async () => {
-      const testSuite = 'input-png';
+      const testSuite = 'input-png'
       const result = await generateTempImages(
         {
           scrape: false,
@@ -591,16 +591,16 @@ describe('visually compares generated images with', () => {
         },
         './static/logo.png',
         `./temp/local/${testSuite}`,
-      );
+      )
 
-      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
       matchResult.forEach((mr: MatchResult) => {
-        expect(mr.looksSame).toBeTruthy();
-      });
-    });
+        expect(mr.looksSame).toBeTruthy()
+      })
+    })
 
     test('in svg format', async () => {
-      const testSuite = 'input-svg';
+      const testSuite = 'input-svg'
       const result = await generateTempImages(
         {
           scrape: false,
@@ -609,17 +609,17 @@ describe('visually compares generated images with', () => {
         },
         './static/logo.svg',
         `./temp/local/${testSuite}`,
-      );
+      )
 
-      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
       matchResult.forEach((mr: MatchResult) => {
-        expect(mr.looksSame).toBeTruthy();
-      });
-    });
+        expect(mr.looksSame).toBeTruthy()
+      })
+    })
 
     describe('in html format', () => {
       test('with dark mode disabled', async () => {
-        const testSuite = 'input-html';
+        const testSuite = 'input-html'
         const result = await generateTempImages(
           {
             scrape: false,
@@ -627,16 +627,16 @@ describe('visually compares generated images with', () => {
           },
           './static/logo.html',
           `./temp/local/${testSuite}`,
-        );
+        )
 
-        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
         matchResult.forEach((mr: MatchResult) => {
-          expect(mr.looksSame).toBeTruthy();
-        });
-      });
+          expect(mr.looksSame).toBeTruthy()
+        })
+      })
 
       test('with dark mode enabled', async () => {
-        const testSuite = 'input-html-dark';
+        const testSuite = 'input-html-dark'
         const result = await generateTempImages(
           {
             scrape: false,
@@ -645,17 +645,17 @@ describe('visually compares generated images with', () => {
           },
           './static/logo.html',
           `./temp/local/${testSuite}`,
-        );
+        )
 
-        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
         matchResult.forEach((mr: MatchResult) => {
-          expect(mr.looksSame).toBeTruthy();
-        });
-      });
-    });
+          expect(mr.looksSame).toBeTruthy()
+        })
+      })
+    })
 
     test('with a transparency', async () => {
-      const testSuite = 'output-transparent';
+      const testSuite = 'output-transparent'
       const result = await generateTempImages(
         {
           scrape: false,
@@ -666,21 +666,21 @@ describe('visually compares generated images with', () => {
         },
         './static/logo.svg',
         `./temp/local/${testSuite}`,
-      );
+      )
 
-      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
       matchResult.forEach((mr: MatchResult) => {
-        expect(mr.looksSame).toBeTruthy();
-      });
-    });
-  });
+        expect(mr.looksSame).toBeTruthy()
+      })
+    })
+  })
 
   // Somehow flaky tests, occasionally failing on windows-latest
   // TODO: inspect the root cause of the failure
   // eslint-disable-next-line jest/no-disabled-tests
   describe.skip('using a remote input', () => {
     test('in png format', async () => {
-      const testSuite = 'input-png';
+      const testSuite = 'input-png'
       const result = await generateTempImages(
         {
           scrape: false,
@@ -689,16 +689,16 @@ describe('visually compares generated images with', () => {
         },
         'https://onderceylan.github.io/pwa-asset-generator/static/logo.png',
         `./temp/remote/${testSuite}`,
-      );
+      )
 
-      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
       matchResult.forEach((mr: MatchResult) => {
-        expect(mr.looksSame).toBeTruthy();
-      });
-    });
+        expect(mr.looksSame).toBeTruthy()
+      })
+    })
 
     test('in svg format', async () => {
-      const testSuite = 'input-svg';
+      const testSuite = 'input-svg'
       const result = await generateTempImages(
         {
           scrape: false,
@@ -707,17 +707,17 @@ describe('visually compares generated images with', () => {
         },
         'https://onderceylan.github.io/pwa-asset-generator/static/logo.svg',
         `./temp/remote/${testSuite}`,
-      );
+      )
 
-      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+      const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
       matchResult.forEach((mr: MatchResult) => {
-        expect(mr.looksSame).toBeTruthy();
-      });
-    });
+        expect(mr.looksSame).toBeTruthy()
+      })
+    })
 
     describe('in html format', () => {
       test('with dark mode disabled', async () => {
-        const testSuite = 'input-html';
+        const testSuite = 'input-html'
         const result = await generateTempImages(
           {
             scrape: false,
@@ -725,16 +725,16 @@ describe('visually compares generated images with', () => {
           },
           'https://onderceylan.github.io/pwa-asset-generator/static/logo.html',
           `./temp/remote/${testSuite}`,
-        );
+        )
 
-        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
         matchResult.forEach((mr: MatchResult) => {
-          expect(mr.looksSame).toBeTruthy();
-        });
-      });
+          expect(mr.looksSame).toBeTruthy()
+        })
+      })
 
       test('with dark mode enabled', async () => {
-        const testSuite = 'input-html-dark';
+        const testSuite = 'input-html-dark'
         const result = await generateTempImages(
           {
             scrape: false,
@@ -743,13 +743,13 @@ describe('visually compares generated images with', () => {
           },
           'https://onderceylan.github.io/pwa-asset-generator/static/logo.html',
           `./temp/remote/${testSuite}`,
-        );
+        )
 
-        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite);
+        const matchResult = await getAllSnapshotsMatchStatus(result, testSuite)
         matchResult.forEach((mr: MatchResult) => {
-          expect(mr.looksSame).toBeTruthy();
-        });
-      });
-    });
-  });
-});
+          expect(mr.looksSame).toBeTruthy()
+        })
+      })
+    })
+  })
+})

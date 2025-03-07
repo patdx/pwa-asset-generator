@@ -4,7 +4,7 @@ Thank you for considering a contribution to `pwa-asset-generator`. Before jumpin
 
 ## Code of conduct
 
-First of all, please read the [__Code of Conduct__](https://github.com/elegantapp/pwa-asset-generator/blob/master/CODE_OF_CONDUCT.md) carefully. Once you start contributing, you agree on all terms in the code of conduct without any exception.
+First of all, please read the [**Code of Conduct**](https://github.com/elegantapp/pwa-asset-generator/blob/master/CODE_OF_CONDUCT.md) carefully. Once you start contributing, you agree on all terms in the code of conduct without any exception.
 
 ## Where to start
 
@@ -14,9 +14,9 @@ Please note that if any of the issues have an assignee or is `In Progress` withi
 
 ## Code style
 
-* This project uses an opinionated code style via [prettier](https://github.com/prettier/prettier).
-* Every time you commit, eslint prettier plugin fixes any formatting issues via git commit hooks to keep the code style consistent across the project. Please do not disable commit hooks while committing.
-* To enable commit message linting via git hooks, please run `npm install` before committing any change.
+- This project uses an opinionated code style via [prettier](https://github.com/prettier/prettier).
+- Every time you commit, eslint prettier plugin fixes any formatting issues via git commit hooks to keep the code style consistent across the project. Please do not disable commit hooks while committing.
+- To enable commit message linting via git hooks, please run `npm install` before committing any change.
 
 ## Commit messages and continuous deployment
 
@@ -28,9 +28,9 @@ All of your commit messages will be linted by `commitlint` to make sure they're 
 
 Please note that your commit message has a direct impact on the deployment of a new release. When your PR is merged to `master`, any changes in your PR with;
 
-*  commit(s) of type `fix` will trigger a new `patch` release, e.g. +`0.0.1`
-*  commit(s) of type `feat` will trigger a new `minor` release, e.g. +`0.1.0`
-*  commit(s) with `BREAKING CHANGE` in body or footer of the message will trigger a new `major` release, e.g. +`1.0.0`
+- commit(s) of type `fix` will trigger a new `patch` release, e.g. +`0.0.1`
+- commit(s) of type `feat` will trigger a new `minor` release, e.g. +`0.1.0`
+- commit(s) with `BREAKING CHANGE` in body or footer of the message will trigger a new `major` release, e.g. +`1.0.0`
 
 You can read more about it on [commitizen](https://github.com/commitizen/cz-cli), [semver](https://semver.org), and [semantic-release](https://github.com/semantic-release/semantic-release).
 
@@ -53,35 +53,41 @@ Run `npm run build` to compile TypeScript source to JavaScript. JS files will be
 ## Testing
 
 ### Manual tests
+
 If you'd like to manually test the library, you can follow the steps below;
 
 #### Testing the functionality
+
 1. Build the library with `npm run build` command
 2. Execute the cli binary over `./bin/cli` command
 
 #### Testing the package contents
+
 1. Build the library with `npm run build` command
 2. Pack a package for npm `npm pack` command - this will create a package in your local repo with the name `pwa-asset-generator-x.y.z.tgz`
 3. This will show you the output of package creation, with the file contents of the package
 
 #### Testing the lib e2e
+
 1. Either install the package globally by running `npm pack && npm i -g pwa-asset-generator-x.y.z.tgz` or `npm i -g .`
 2. Test the functionality with `pwa-asset-generator` command
 
 ### Automated tests
+
 The project uses [jest](https://jestjs.io) for automated integration and e2e testing with snapshot and visual regression testing approaches. e2e tests are encouraged over unit tests in this project.
 
 Tests can be executed with `npm test` command.
 Both snapshots and visual samples can be updated with `npm run test:update` when necessary.
 
 #### Snapshot testing
-* Utilizing jest's handy [snapshot testing](https://jestjs.io/docs/en/snapshot-testing) feature while testing feature integration is recommended. Please see [main.test.ts](https://github.com/elegantapp/pwa-asset-generator/blob/master/src/main.test.ts) file and [snapshots](https://github.com/elegantapp/pwa-asset-generator/tree/master/src/__snapshots__) folder for examples.
-* You can update the snapshots with `npm run test:update:snapshots` command when necessary.
+
+- Utilizing jest's handy [snapshot testing](https://jestjs.io/docs/en/snapshot-testing) feature while testing feature integration is recommended. Please see [main.test.ts](https://github.com/elegantapp/pwa-asset-generator/blob/master/src/main.test.ts) file and [snapshots](https://github.com/elegantapp/pwa-asset-generator/tree/master/src/__snapshots__) folder for examples.
+- You can update the snapshots with `npm run test:update:snapshots` command when necessary.
 
 #### Visual regression testing
 
-* There are tests in [main.test.ts](https://github.com/elegantapp/pwa-asset-generator/blob/master/src/main.test.ts) file, running visual regressions over generated image file set. It tests if generated images are visually different from samples saved in [snapshots/visual](https://github.com/elegantapp/pwa-asset-generator/tree/master/src/__snapshots__/visual) folder, guaranteeing the expected output for all image generation scenarios.
-* You can update the visual samples with `npm run test:update:visuals` command when necessary.
+- There are tests in [main.test.ts](https://github.com/elegantapp/pwa-asset-generator/blob/master/src/main.test.ts) file, running visual regressions over generated image file set. It tests if generated images are visually different from samples saved in [snapshots/visual](https://github.com/elegantapp/pwa-asset-generator/tree/master/src/__snapshots__/visual) folder, guaranteeing the expected output for all image generation scenarios.
+- You can update the visual samples with `npm run test:update:visuals` command when necessary.
 
 > Please apply any of your code changes alongside with e2e or integration tests.
 
