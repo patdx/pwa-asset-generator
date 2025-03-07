@@ -1,11 +1,16 @@
 {
-  "name": "pwa-asset-generator",
+  "name": "@patdx/pwa-asset-generator",
+  "type": "module",
   "version": "6.4.0",
   "description": "Automates PWA asset generation and image declaration. Automatically generates icon and splash screen images, favicons and mstile images. Updates manifest.json and index.html files with the generated images according to Web App Manifest specs and Apple Human Interface guidelines.",
+  "exports": {
+    ".": "./dist/main.js",
+    "./package.json": "./package.json"
+  },
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "bin": {
-    "pwa-asset-generator": "bin/cli"
+    "pwa-asset-generator": "bin/cli.js"
   },
   "scripts": {
     "prepare": "husky install",
@@ -21,7 +26,7 @@
     "visuals:input-html-dark": "rimraf ./src/__snapshots__/visual/input-html-dark && node ./bin/cli ./static/logo.html ./src/__snapshots__/visual/input-html-dark -s false -d true",
     "chromium": "cross-env PAG_TEST_MODE=1 node bin/install",
     "update": "node bin/update-fallback-data",
-    "build": "rimraf ./dist && tsc",
+    "build": "rimraf ./dist && tsc && node build.js",
     "start": "tsc -w",
     "lint": "eslint src/**/**.ts",
     "lint:fix": "npm run lint -- --fix",
@@ -66,18 +71,20 @@
     "url": "https://opencollective.com/pwa-asset-generator"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
-    "cheerio": "1.0.0-rc.12",
-    "chrome-launcher": "^0.15.0",
+    "@puppeteer/browsers": "2.8.0",
+    "chalk": "^5.4.1",
+    "cheerio": "1.0.0",
+    "chrome-launcher": "^1.1.2",
     "find-process": "^1.4.7",
     "lodash.isequal": "^4.5.0",
     "lodash.uniqwith": "^4.5.0",
-    "meow": "^9.0.0",
+    "meow": "^13.2.0",
     "mime-types": "^2.1.35",
+    "p-queue": "8.1.0",
     "pretty": "^2.0.0",
     "progress": "^2.0.3",
-    "puppeteer-core": "^13.5.2",
-    "slash": "^3.0.0"
+    "puppeteer-core": "^24.4.0",
+    "slash": "^5.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",
@@ -88,7 +95,6 @@
     "@semantic-release/github": "^8.0.7",
     "@semantic-release/npm": "^10.0.2",
     "@semantic-release/release-notes-generator": "^10.0.3",
-    "@types/cheerio": "^0.22.31",
     "@types/find-process": "^1.2.0",
     "@types/jest": "^29.1.1",
     "@types/lodash.isequal": "^4.5.5",
@@ -99,6 +105,7 @@
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "cross-env": "^7.0.3",
+    "esbuild": "0.25.0",
     "eslint": "^8.24.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
@@ -115,11 +122,12 @@
     "rimraf": "^3.0.2",
     "semantic-release": "^21.0.0",
     "ts-jest": "^29.0.3",
-    "typescript": "^4.8.4"
+    "typescript": "^5.8.2"
   },
   "lint-staged": {
     "**/**.ts": [
       "eslint --fix"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3"
 }

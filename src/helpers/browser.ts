@@ -1,8 +1,5 @@
-import puppeteer, {
-  Browser,
-  PuppeteerNodeLaunchOptions,
-  BrowserFetcherRevisionInfo,
-} from 'puppeteer-core';
+import puppeteer, { Browser } from 'puppeteer-core';
+import type { LaunchOptions as PuppeteerNodeLaunchOptions } from '@puppeteer/browsers';
 import {
   launch,
   LaunchedChrome,
@@ -12,7 +9,6 @@ import find from 'find-process';
 import { get } from 'http';
 import preLogger from './logger';
 import constants from '../config/constants';
-import installer from './installer';
 
 interface BrowserVersionInfo {
   Browser: string;
@@ -23,45 +19,10 @@ interface BrowserVersionInfo {
   'Webkit-Version': string;
 }
 
-const isPreferredBrowserRevisionInstalled = (): boolean => {
-  const revisionInfo = installer.getPreferredBrowserRevisionInfo();
-  return revisionInfo.local;
-};
-
-const getLocalRevisionList = (): Promise<string[]> => {
-  return installer.getBrowserFetcher().localRevisions();
-};
-
-const getLocalRevisionInfo = async (): Promise<
-  BrowserFetcherRevisionInfo | undefined
-> => {
-  if (isPreferredBrowserRevisionInstalled()) {
-    return installer.getPreferredBrowserRevisionInfo();
-  }
-
-  const localRevisions = await getLocalRevisionList();
-
-  if (localRevisions.length > 0) {
-    const lastRevision = localRevisions.pop() as string;
-    return installer.getBrowserFetcher().revisionInfo(lastRevision);
-  }
-
-  return undefined;
-};
-
 const getLocalBrowserInstance = async (
   launchArgs: PuppeteerNodeLaunchOptions,
   noSandbox: boolean,
 ): Promise<Browser> => {
-  let revisionInfo: BrowserFetcherRevisionInfo;
-  const localRevisionInfo = await getLocalRevisionInfo();
-
-  if (localRevisionInfo) {
-    revisionInfo = localRevisionInfo;
-  } else {
-    revisionInfo = await installer.installPreferredBrowserRevision();
-  }
-
   return puppeteer.launch({
     ...launchArgs,
     ...(noSandbox && {
@@ -71,7 +32,6 @@ const getLocalBrowserInstance = async (
         '--disable-setuid-sandbox',
       ],
     }),
-    executablePath: revisionInfo.executablePath,
   });
 };
 

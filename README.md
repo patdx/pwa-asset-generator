@@ -1,4 +1,5 @@
 # pwa-asset-generator ✨
+
 [![npm](https://img.shields.io/npm/v/pwa-asset-generator?color=brightgreen)](https://www.npmjs.com/package/pwa-asset-generator) [![node](https://img.shields.io/node/v/pwa-asset-generator)](https://www.npmjs.com/package/pwa-asset-generator) [![Build Status](https://github.com/elegantapp/pwa-asset-generator/workflows/CI/badge.svg)](https://github.com/elegantapp/pwa-asset-generator/actions?workflow=CI) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-brightgreen.svg)](https://github.com/semantic-release/semantic-release) [![open-collective](https://opencollective.com/pwa-asset-generator/tiers/sponsor/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/pwa-asset-generator/donate)
 
 Automates PWA asset generation and image declaration. Automatically generates icon and splash screen images, favicons and mstile images. Updates manifest.json and index.html files with the generated images according to Web App Manifest specs and Apple Human Interface guidelines.
@@ -11,11 +12,11 @@ Automates PWA asset generation and image declaration. Automatically generates ic
 
 When you build a PWA with a goal of providing native-like experiences on multiple platforms and stores, you need to meet with the criteria of those platforms and stores with your PWA assets; icon sizes and splash screens. Such criteria are;
 
-* Google's Android platform respects Web App Manifest API specs, and it expects you to provide at least 2 icon sizes in your manifest file - https://web.dev/add-manifest/#icons 🤔
+- Google's Android platform respects Web App Manifest API specs, and it expects you to provide at least 2 icon sizes in your manifest file - https://web.dev/add-manifest/#icons 🤔
 
-* Apple's iOS currently doesn't support Web App Manifest API specs. You need to introduce custom html tags to set icons and splash screens to your PWA 🤔
-    * You need to introduce a special html link tag with rel `apple-touch-icon` to provide icons for your PWA when it's added to home screen. Read more about it on [Apple's Icon Guidelines](https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/app-icon/) and [Safari Web Content Guide](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html).
-    * You need to introduce a special html link tag with rel `apple-touch-startup-image` to provide a splash screen for your PWA to display when it's opened and in the background. You need to create a splash screen image for every resolution on [Apple's Launch Screen Guidelines](https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/#static-launch-screen-images-not-recommended) and html tag with media attr for each image like `<link rel="apple-touch-startup-image" href="temp/apple-splash-2048-2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">`. Unfortunately, this requirement is not documented on the [Safari Web Content Guide](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html) sufficiently.
+- Apple's iOS currently doesn't support Web App Manifest API specs. You need to introduce custom html tags to set icons and splash screens to your PWA 🤔
+  - You need to introduce a special html link tag with rel `apple-touch-icon` to provide icons for your PWA when it's added to home screen. Read more about it on [Apple's Icon Guidelines](https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/app-icon/) and [Safari Web Content Guide](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html).
+  - You need to introduce a special html link tag with rel `apple-touch-startup-image` to provide a splash screen for your PWA to display when it's opened and in the background. You need to create a splash screen image for every resolution on [Apple's Launch Screen Guidelines](https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/#static-launch-screen-images-not-recommended) and html tag with media attr for each image like `<link rel="apple-touch-startup-image" href="temp/apple-splash-2048-2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">`. Unfortunately, this requirement is not documented on the [Safari Web Content Guide](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html) sufficiently.
 
 Creating icon and splash screen images for all the platforms, maintaining sizes and quality for all and adding html tags for each image can be overwhelming. So, why not automate it? 💡
 
@@ -23,31 +24,31 @@ Creating icon and splash screen images for all the platforms, maintaining sizes 
 
 PWA Asset Generator automates the image generation in a creative way. Having [Puppeteer](https://pptr.dev) at its core enables lots of possibilities.
 
-* Generates both icons and splash screens with optional `--icon-only` `--splash-only` `--landscape-only` and `--portrait-only` flags ✨
+- Generates both icons and splash screens with optional `--icon-only` `--splash-only` `--landscape-only` and `--portrait-only` flags ✨
 
-* Updates your `manifest.json` and `index.html` files automatically for declaring generated image assets 🙌
+- Updates your `manifest.json` and `index.html` files automatically for declaring generated image assets 🙌
 
-* Scrapes the latest specs from Apple Human Interface guidelines website via Puppeteer to make your PWA ready for all/recent iOS devices out there 🤖
+- Scrapes the latest specs from Apple Human Interface guidelines website via Puppeteer to make your PWA ready for all/recent iOS devices out there 🤖
 
-    * Supports offline mode and uses static spec data when things go wrong with scraping 📴
-    * Updates static spec data before each release automatically and [monitors spec changes everyday](https://github.com/elegantapp/pwa-asset-generator/actions?query=workflow%3A%22Sanity+Check%22) 🔄
+  - Supports offline mode and uses static spec data when things go wrong with scraping 📴
+  - Updates static spec data before each release automatically and [monitors spec changes everyday](https://github.com/elegantapp/pwa-asset-generator/actions?query=workflow%3A%22Sanity+Check%22) 🔄
 
-* Uses the Chrome browser as it’s a canvas of your fav image editor. It uses a shell HTML on the fly as an art board and centers your logo before taking screenshots for each resolution via Puppeteer 🤖
+- Uses the Chrome browser as it’s a canvas of your fav image editor. It uses a shell HTML on the fly as an art board and centers your logo before taking screenshots for each resolution via Puppeteer 🤖
 
-* You can provide your source in multiple formats; a local image file, a local HTML file, a remote image or HTML file 🙌
+- You can provide your source in multiple formats; a local image file, a local HTML file, a remote image or HTML file 🙌
 
-    * When it’s an image source, it is centered over the background option you provide 🌅
-    * When it’s an HTML source, you can go as creative as you like; position your logo, use SVG filters, use variable fonts, use gradient backgrounds, use media queries while generating dark mode splash screens, use typography and etc. Your HTML file is rendered on Chrome before taking screenshots for each resolution 🎨
+  - When it’s an image source, it is centered over the background option you provide 🌅
+  - When it’s an HTML source, you can go as creative as you like; position your logo, use SVG filters, use variable fonts, use gradient backgrounds, use media queries while generating dark mode splash screens, use typography and etc. Your HTML file is rendered on Chrome before taking screenshots for each resolution 🎨
 
-* Uses [puppeteer-core](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteer-vs-puppeteer-core) instead of puppeteer and only installs Chromium if it doesn't exist on the system. Saves waste of ~110-150mb of disk space and many seconds from the world per each user 🌎⚡️
+- Uses [puppeteer-core](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteer-vs-puppeteer-core) instead of puppeteer and only installs Chromium if it doesn't exist on the system. Saves waste of ~110-150mb of disk space and many seconds from the world per each user 🌎⚡️
 
-* Supports dark mode splash screens on iOS! So, you can provide both light 🌕 and dark 🌚 splash screen images to differentiate your apps look & feel based on user preference 🌙
+- Supports dark mode splash screens on iOS! So, you can provide both light 🌕 and dark 🌚 splash screen images to differentiate your apps look & feel based on user preference 🌙
 
-* Supports [PWA maskable icons](https://web.dev/maskable-icon/) by declaring them in manifest file adaptively 🖼
+- Supports [PWA maskable icons](https://web.dev/maskable-icon/) by declaring them in manifest file adaptively 🖼
 
-* Supports flexible tag formatting and path customization options to comply with various development environments. You can adjust your output using single quotes `--single-quotes`, self-closing tags `--xhtml`, path prefixes `--path` and path overrides `--path-override` 📝
+- Supports flexible tag formatting and path customization options to comply with various development environments. You can adjust your output using single quotes `--single-quotes`, self-closing tags `--xhtml`, path prefixes `--path` and path overrides `--path-override` 📝
 
-* Supports generating classic web app icons such as favicons `--favicon` and Windows static tiles `--mstile` ⏪
+- Supports generating classic web app icons such as favicons `--favicon` and Windows static tiles `--mstile` ⏪
 
 ## Install
 
@@ -142,20 +143,23 @@ const pwaAssetGenerator = require('pwa-asset-generator');
 
 // Generate images over a module function call, instead of using CLI commands
 (async () => {
-  const { savedImages, htmlMeta, manifestJsonContent } = await pwaAssetGenerator.generateImages(
-    'https://elegantapp.github.io/pwa-asset-generator/static/logo.png',
-    './temp',
-    {
-      scrape: false,
-      background: "linear-gradient(to right, #fa709a 0%, #fee140 100%)",
-      splashOnly: true,
-      portraitOnly: true,
-      log: false
-    });
+  const { savedImages, htmlMeta, manifestJsonContent } =
+    await pwaAssetGenerator.generateImages(
+      'https://elegantapp.github.io/pwa-asset-generator/static/logo.png',
+      './temp',
+      {
+        scrape: false,
+        background: 'linear-gradient(to right, #fa709a 0%, #fee140 100%)',
+        splashOnly: true,
+        portraitOnly: true,
+        log: false,
+      },
+    );
 })();
 
 // Access to static data for Apple Device specs that are used for generating launch images
-const appleDeviceSpecsForLaunchImages = pwaAssetGenerator.appleDeviceSpecsForLaunchImages;
+const appleDeviceSpecsForLaunchImages =
+  pwaAssetGenerator.appleDeviceSpecsForLaunchImages;
 ```
 
 ## FAQ
@@ -169,17 +173,19 @@ pwa-asset-generator uses a Chrome tab as an art board. Your input image is being
 There's no particular safe margin requirement as 10% padding is added around your image input by default with CSS. That being said, you can customize the padding as it's described in the next answer. The library uses a similar approach while generating icons too, with the same default padding 10% around the image input. See it in action [here at this tweet](https://twitter.com/onderceylan/status/1190657108003282945) to understand the concept.
 
 ### How can I make an image smaller or larger relative to the background?
+
 The default value for the padding surrounding the image is 10%. But it's just a css padding value that you can configure and override yourself with **-p --padding** option.
 
 1. You can use a more advanced padding value based on your taste and goal;
 
-    **Larger logo:** `--padding "calc(50vh - 20%) calc(50vw - 40%)"`
+   **Larger logo:** `--padding "calc(50vh - 20%) calc(50vw - 40%)"`
 
-    **Smaller logo:** `--padding "calc(50vh - 5%) calc(50vw - 10%)"`
+   **Smaller logo:** `--padding "calc(50vh - 5%) calc(50vw - 10%)"`
 
 2. You can create your own html input file which uses css media queries and provides different padding options based on breakpoints: https://material.io/design/layout/responsive-layout-grid.html#breakpoints
 
 ### How can I generate a PNG image with a transparency?
+
 Although the default background color is **transparent**, there's another option that you need to use for generating transparent images: **opaque**.
 
 You need to run your CLI command with `--opaque false` option in order to get the transparency; `pwa-asset-generator logo.svg --opaque false --type png`.
@@ -187,14 +193,16 @@ You need to run your CLI command with `--opaque false` option in order to get th
 This might be confusing for some, but it's necessary to support the use of background values with alpha channels.
 
 ### How can I generate a transparent favicon, and app icons with opaque background?
+
 Default behaviour of the library is to generate a favicon along with app icons. So, it's not possible to generate one without other.
 
 However, you can use this workaround to work with this edge case:
 
-* First, generate a favicon with `--opaque false --icon-only --favicon --type png` options.
-* Then, overwrite app icons with `--background "#FFF" --icon-only` options.
+- First, generate a favicon with `--opaque false --icon-only --favicon --type png` options.
+- Then, overwrite app icons with `--background "#FFF" --icon-only` options.
 
 ### How can I generate both dark mode and light mode splash screen images?
+
 You need to execute two consequent commands in order to generate both dark mode and light mode splash screens for you PWA running on iOS.
 
 Here's a pair of example commands that can be used for generating both modes;
@@ -209,11 +217,13 @@ npx pwa-asset-generator dark-logo.svg ./assets --background lightgray --splash-o
 > **An existing PWA on a home screen will not be able to recognize changed system settings for it's launch image. This is a limitation on iOS.**
 
 ### Are deprecated `device-width` and `device-height` media queries necessary?
+
 Even though they're deprecated, `device-width` and `device-height` media queries are still being used by iOS to declare splash screen images for web apps added to a home screen.
 
 When it's an exact match with device's resolution, iOS displays the splash screen as a launch image on bookmarks / PWAs added to a home screen.
 
 ### How can I use JSX syntax to generate the meta tags?
+
 If you don't have HTML files in your project, and have a JSX/TSX files instead, you can either use `--xhtml` option or self-generate the meta tags.
 
 The `--xhtml` option allows you to generate the required meta tags with self-closing them - `< />`. This will allow copying generated tags directly to a JSX/TSX file.

@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
@@ -12,15 +13,11 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "listEmittedFiles": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "emitDeclarationOnly": true
   },
-  "exclude": [
-    "node_modules",
-    "src/**/*.test.ts",
-    "dist"
-  ]
+  "exclude": ["node_modules", "src/**/*.test.ts", "dist"]
 }

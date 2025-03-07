@@ -1,4 +1,4 @@
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import pretty from 'pretty';
 import { lookup } from 'mime-types';
 import path from 'path';
@@ -251,7 +251,7 @@ const addMetaTagsToIndexPage = async (
 
   const indexHtmlFile = await file.readFile(indexHtmlFilePath);
   const $ = cheerio.load(indexHtmlFile, {
-    decodeEntities: false,
+    // decodeEntities: false,
     xmlMode: xhtml,
   });
 

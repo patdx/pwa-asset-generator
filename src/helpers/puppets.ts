@@ -1,4 +1,5 @@
 import { Browser } from 'puppeteer-core';
+import PQueue from 'p-queue';
 import constants from '../config/constants';
 import url from './url';
 import file from './file';
@@ -185,65 +186,72 @@ const saveImages = async (
     shellHtml = await url.getShellHtml(source, options);
   }
 
-  return Promise.all(
-    imageList.map(async ({ name, width, height, scaleFactor, orientation }) => {
-      const { quality } = options;
-      const isIcon = name.includes('icon');
-      const isManifestIcon = name.includes('manifest-icon');
-      const type = isIcon ? 'png' : options.type;
-      const path = file.getImageSavePath(
-        name,
-        output,
-        type,
-        options.maskable,
-        isManifestIcon,
-      );
+  const queue = new PQueue({ concurrency: 1 });
 
-      try {
-        const page = await browser.newPage();
-        await page.emulate({
-          userAgent: constants.EMULATED_USER_AGENT,
-          viewport: {
-            width: width / scaleFactor,
-            height: height / scaleFactor,
-            deviceScaleFactor: scaleFactor,
-            isLandscape: orientation === 'landscape',
-          },
-        });
+  const result = await queue.addAll(
+    imageList.map(
+      ({ name, width, height, scaleFactor, orientation }) =>
+        async (): Promise<SavedImage> => {
+          const { quality } = options;
+          const isIcon = name.includes('icon');
+          const isManifestIcon = name.includes('manifest-icon');
+          const type = isIcon ? 'png' : options.type;
+          const path = file.getImageSavePath(
+            name,
+            output,
+            type,
+            options.maskable,
+            isManifestIcon,
+          );
 
-        if (address) {
-          // Emulate dark mode media feature when html source is provided and darkMode is enabled
-          if (options.darkMode) {
-            await page.emulateMediaFeatures([
-              {
-                name: 'prefers-color-scheme',
-                value: 'dark',
+          try {
+            const page = await browser.newPage();
+            await page.emulate({
+              userAgent: constants.EMULATED_USER_AGENT,
+              viewport: {
+                width: width / scaleFactor,
+                height: height / scaleFactor,
+                deviceScaleFactor: scaleFactor,
+                isLandscape: orientation === 'landscape',
               },
-            ]);
+            });
+
+            if (address) {
+              // Emulate dark mode media feature when html source is provided and darkMode is enabled
+              if (options.darkMode) {
+                await page.emulateMediaFeatures([
+                  {
+                    name: 'prefers-color-scheme',
+                    value: 'dark',
+                  },
+                ]);
+              }
+              await page.goto(address, { waitUntil: 'networkidle0' });
+            } else {
+              await page.setContent(shellHtml);
+            }
+
+            await page.screenshot({
+              path,
+              omitBackground: !options.opaque,
+              ...(type !== 'png' ? { quality } : {}),
+            });
+
+            await page.close();
+
+            logger.success(`Saved image ${name}`);
+
+            return { name, width, height, scaleFactor, path, orientation };
+          } catch (e) {
+            const error = e as Error;
+            logger.error(error.message);
+            throw Error(`Failed to save image ${name}`);
           }
-          await page.goto(address, { waitUntil: 'networkidle0' });
-        } else {
-          await page.setContent(shellHtml);
-        }
-
-        await page.screenshot({
-          path,
-          omitBackground: !options.opaque,
-          ...(type !== 'png' ? { quality } : {}),
-        });
-
-        await page.close();
-
-        logger.success(`Saved image ${name}`);
-
-        return { name, width, height, scaleFactor, path, orientation };
-      } catch (e) {
-        const error = e as Error;
-        logger.error(error.message);
-        throw Error(`Failed to save image ${name}`);
-      }
-    }),
+        },
+    ),
   );
+
+  return result;
 };
 
 const generateImages = async (
@@ -262,6 +270,7 @@ const generateImages = async (
 
   const { browser, chrome } = await browserHelper.getBrowserInstance(
     {
+      // @ts-expect-error not sure where timeout argument should go
       timeout: constants.BROWSER_TIMEOUT,
       args: constants.CHROME_LAUNCH_ARGS,
     },

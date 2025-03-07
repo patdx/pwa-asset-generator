@@ -36,7 +36,7 @@ const normalizeOutput = (output: string): string => {
 const getDefaultOptions = (): Options => {
   const flags = constants.FLAGS as Record<
     keyof Options,
-    { type: string; alias: string; default?: string | number | boolean }
+    { type: string; shortFlag: string; default?: string | number | boolean }
   >;
 
   // TODO: replace Object.keys typecasting when it can be derived as a type

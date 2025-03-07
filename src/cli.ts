@@ -1,7 +1,7 @@
 import meow from 'meow';
+import constants from './config/constants';
 import preLogger from './helpers/logger';
 import { generateImages } from './main';
-import constants from './config/constants';
 import { CLIOptions } from './models/options';
 
 const cli = meow(
@@ -73,9 +73,11 @@ $ pwa-asset-generator --help
     --log false
 `,
   {
+    importMeta: import.meta,
     flags: constants.FLAGS,
-  } as meow.Options<meow.AnyFlags>,
+  },
 );
+
 const flags = cli.flags as CLIOptions;
 const logger = preLogger('cli', flags);
 
