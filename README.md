@@ -1,6 +1,6 @@
-# pwa-asset-generator ✨
+# @patdx/pwa-asset-generator ✨
 
-[![npm](https://img.shields.io/npm/v/pwa-asset-generator?color=brightgreen)](https://www.npmjs.com/package/pwa-asset-generator) [![node](https://img.shields.io/node/v/pwa-asset-generator)](https://www.npmjs.com/package/pwa-asset-generator) [![Build Status](https://github.com/elegantapp/pwa-asset-generator/workflows/CI/badge.svg)](https://github.com/elegantapp/pwa-asset-generator/actions?workflow=CI) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-brightgreen.svg)](https://github.com/semantic-release/semantic-release) [![open-collective](https://opencollective.com/pwa-asset-generator/tiers/sponsor/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/pwa-asset-generator/donate)
+[![npm](https://img.shields.io/npm/v/@patdx/pwa-asset-generator?color=brightgreen)](https://www.npmjs.com/package/@patdx/pwa-asset-generator) [![node](https://img.shields.io/node/v/@patdx/pwa-asset-generator)](https://www.npmjs.com/package/@patdx/pwa-asset-generator) [![Build Status](https://github.com/elegantapp/@patdx/pwa-asset-generator/workflows/CI/badge.svg)](https://github.com/elegantapp/@patdx/pwa-asset-generator/actions?workflow=CI) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-brightgreen.svg)](https://github.com/semantic-release/semantic-release)
 
 Automates PWA asset generation and image declaration. Automatically generates icon and splash screen images, favicons and mstile images. Updates manifest.json and index.html files with the generated images according to Web App Manifest specs and Apple Human Interface guidelines.
 
@@ -53,13 +53,13 @@ PWA Asset Generator automates the image generation in a creative way. Having [Pu
 ## Install
 
 ```
-$ npm install pwa-asset-generator
+$ npm install @patdx/pwa-asset-generator
 ```
 
 ## One-off execution
 
 ```
-$ npx pwa-asset-generator
+$ npx @patdx/pwa-asset-generator
 ```
 
 Read more about npx [here](https://blog.npmjs.org/post/162869356040/introducing-npx-an-npm-package-runner).
@@ -139,7 +139,7 @@ $ pwa-asset-generator --help
 pwa-asset-generator is not only a CLI. It's a CLI wrapper around a JavaScript module. It's possible to access the underlying API of the library as it's described in below example;
 
 ```javascript
-const pwaAssetGenerator = require('pwa-asset-generator');
+import * as pwaAssetGenerator = from 'pwa-asset-generator';
 
 // Generate images over a module function call, instead of using CLI commands
 (async () => {
