@@ -3,7 +3,7 @@ import constants from './config/constants'
 
 describe('CLI', () => {
   test('does not throw when there is not any arg', async () => {
-    expect(() => execa.sync('./bin/cli', [])).not.toThrow()
+    expect(() => execa.sync('./bin/cli.js', [])).not.toThrow()
   })
 
   test('integrates with main API and creates an output with generated meta', async () => {
