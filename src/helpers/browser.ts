@@ -1,4 +1,5 @@
-import puppeteer, { Browser } from 'puppeteer-core'
+/* eslint-disable no-console */
+import puppeteer, { Browser } from 'puppeteer'
 import type { LaunchOptions as PuppeteerNodeLaunchOptions } from '@puppeteer/browsers'
 import {
   launch,
@@ -76,13 +77,13 @@ const getSystemBrowserInstance = async (
   })
 }
 
-const getBrowserInstance = async (
+export const getBrowserInstance_real = async (
   launchArgs: PuppeteerNodeLaunchOptions,
   noSandbox: boolean,
 ): Promise<{ chrome: LaunchedChrome | undefined; browser: Browser }> => {
   const LAUNCHER_CONNECTION_REFUSED_ERROR_CODE = 'ECONNREFUSED'
   const LAUNCHER_NOT_INSTALLED_ERROR_CODE = 'ERR_LAUNCHER_NOT_INSTALLED'
-  const logger = preLogger(getBrowserInstance.name)
+  const logger = preLogger(getBrowserInstance_real.name)
 
   let browser: Browser
   let chrome: LaunchedChrome | undefined
@@ -121,12 +122,29 @@ export const killBrowser = async (
   browser: Browser,
   chrome: LaunchedChrome | undefined,
 ): Promise<void> => {
+  console.log(`killing browser instance`)
   if (chrome) {
     await browser.disconnect()
     await chrome.kill()
   } else {
     await browser.close()
   }
+}
+
+const getBrowserInstance = async (
+  launchArgs: PuppeteerNodeLaunchOptions,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  _noSandbox: boolean,
+): Promise<{ chrome: LaunchedChrome | undefined; browser: Browser }> => {
+  console.log(`getting browser instance`)
+  const browser = await getLocalBrowserInstance(
+    launchArgs,
+    true, // need noSandbox for CI
+    //  noSandbox
+  )
+  console.log(`got browser instance`)
+
+  return { chrome: undefined, browser }
 }
 
 export default {

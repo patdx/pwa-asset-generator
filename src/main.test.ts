@@ -348,7 +348,7 @@ describe('generates meta', () => {
           .split('\n')
           .forEach((entry) => expect(output).toContain(entry.trim()))
 
-      // eslint-disable-next-line jest/expect-expect
+      // eslint-disable-next-line vitest/expect-expect
       test('with default html output', async () => {
         const result = await generateTempImages({
           scrape: false,
@@ -370,7 +370,7 @@ describe('generates meta', () => {
         )
       })
 
-      // eslint-disable-next-line jest/expect-expect
+      // eslint-disable-next-line vitest/expect-expect
       test('with dark mode html output', async () => {
         const resultLight = await generateTempImages({
           scrape: false,
@@ -677,7 +677,7 @@ describe('visually compares generated images with', () => {
 
   // Somehow flaky tests, occasionally failing on windows-latest
   // TODO: inspect the root cause of the failure
-  // eslint-disable-next-line jest/no-disabled-tests
+
   describe.skip('using a remote input', () => {
     test('in png format', async () => {
       const testSuite = 'input-png'

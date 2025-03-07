@@ -13,7 +13,7 @@ coverage/*
 src/*
 dist/models/*.js
 !dist/models/meta.js
-bin/install
+bin/install.js
 bin/update-fallback-data
 
 # Declaration files

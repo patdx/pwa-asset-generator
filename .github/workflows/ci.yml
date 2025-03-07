@@ -15,44 +15,48 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        # node: [20, 22]
+        node: [22]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
       - name: Use node ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          registry-url: https://registry.npmjs.org
-      - name: Cache npm
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'pnpm'
+
       - name: Cache jest
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: .jest-cache
-          key: ${{ runner.os }}-${{ matrix.node-version }}-jest
-      - name: install
-        run: npm ci
+          key: ${{ runner.os }}-${{ matrix.node }}-jest
+
+      - name: Install dependencies
+        run: pnpm install
+
       - name: lint
-        run: npm run lint
+        run: pnpm run lint
       - name: build
-        run: npm run build
+        run: pnpm run build
       - name: install chromium
-        run: npm run chromium
+        run: pnpm run chromium
       - name: install package revision
-        run: npm i . -g
+        run: pnpm i . -g
       - name: test
-        run: npm test
+        run: pnpm test
         env:
           FORCE_EXIT: true
       - name: upload visual diff
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: visual-test-diff-${{ runner.os }}-${{ matrix.node }}
