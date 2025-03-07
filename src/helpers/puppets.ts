@@ -1,4 +1,4 @@
-import { Browser } from 'puppeteer-core'
+import { Browser } from 'puppeteer'
 import PQueue from 'p-queue'
 import constants from '../config/constants'
 import url from './url'
