@@ -131,9 +131,14 @@ export const killBrowser = async (
 
 const getBrowserInstance = async (
   launchArgs: PuppeteerNodeLaunchOptions,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   noSandbox: boolean,
 ): Promise<{ chrome: LaunchedChrome | undefined; browser: Browser }> => {
-  const browser = await getLocalBrowserInstance(launchArgs, noSandbox)
+  const browser = await getLocalBrowserInstance(
+    launchArgs,
+    true, // need noSandbox for CI
+    //  noSandbox
+  )
 
   return { chrome: undefined, browser }
 }
