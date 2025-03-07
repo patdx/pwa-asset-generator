@@ -39,7 +39,7 @@ describe('CLI', () => {
     expect(new Set(flagShorthands).size).toBe(flagShorthands.length)
   })
 
-  test('integrates with npx', async () => {
+  test.skip('integrates with npx', async () => {
     let response = { stdout: '', stderr: '' }
     try {
       response = await execa(

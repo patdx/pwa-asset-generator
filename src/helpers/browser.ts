@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import puppeteer, { Browser } from 'puppeteer'
 import type { LaunchOptions as PuppeteerNodeLaunchOptions } from '@puppeteer/browsers'
 import {
@@ -121,6 +122,7 @@ export const killBrowser = async (
   browser: Browser,
   chrome: LaunchedChrome | undefined,
 ): Promise<void> => {
+  console.log(`killing browser instance`)
   if (chrome) {
     await browser.disconnect()
     await chrome.kill()
@@ -134,11 +136,13 @@ const getBrowserInstance = async (
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   _noSandbox: boolean,
 ): Promise<{ chrome: LaunchedChrome | undefined; browser: Browser }> => {
+  console.log(`getting browser instance`)
   const browser = await getLocalBrowserInstance(
     launchArgs,
     true, // need noSandbox for CI
     //  noSandbox
   )
+  console.log(`got browser instance`)
 
   return { chrome: undefined, browser }
 }
