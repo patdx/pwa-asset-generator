@@ -1,4 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CLI > integrates with main API and creates an output with generated meta 1`] = `""`;
 
 exports[`CLI integrates with main API and creates an output with generated meta 1`] = `
 "
