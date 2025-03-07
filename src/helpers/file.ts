@@ -40,6 +40,7 @@ const getAppDir = (): string => {
   let appPath
   try {
     appPath = require.resolve('pwa-asset-generator')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     appPath = (require.main as NodeModule).filename
   }

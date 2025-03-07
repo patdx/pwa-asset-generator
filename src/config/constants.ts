@@ -273,7 +273,6 @@ export default {
     darkMode: boolean,
     xhtml: boolean,
   ): string => {
-    /* eslint-disable */
     if (orientation === 'portrait') {
       return `\
 <link rel="apple-touch-startup-image" href="${url}" media="${
@@ -296,7 +295,6 @@ export default {
       xhtml ? ' /' : ''
     }>
 `
-    /* eslint-enable */
   },
 
   APPLE_HIG_SPLASH_SCREEN_FALLBACK_DATA,

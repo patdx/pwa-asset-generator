@@ -279,6 +279,7 @@ const generateImages = async (
 
   try {
     splashScreenMetaData = await getSplashScreenMetaData(options, browser)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     splashScreenMetaData = constants.APPLE_HIG_SPLASH_SCREEN_FALLBACK_DATA
   }
@@ -315,6 +316,7 @@ const generateImages = async (
 
   try {
     await browserHelper.killBrowser(browser, chrome)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     // Silently try killing chrome as Chrome launcher might have already killed it
   }
