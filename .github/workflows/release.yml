@@ -15,18 +15,18 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
       - name: install
-        run: npm ci
+        run: pnpm install
       # Building for the first time to make dep libs available for update
       - name: update prep
-        run: npm run build
+        run: pnpm run build
 
       - name: update
-        run: npm run update
+        run: pnpm run update
       # Actual build with updated fallback data
       - name: build
-        run: npm run build
+        run: pnpm run build
       - name: publish
-        run: npx semantic-release
+        run: pnpm exec semantic-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
