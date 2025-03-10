@@ -1,5 +1,8 @@
 name: CI
 
+env:
+  HUSKY: '0' # disable husky
+
 on:
   push:
     branches:
@@ -64,6 +67,8 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
+        env:
+          HUSKY: '0' # disable husky
 
       - name: upload visual diff
         uses: actions/upload-artifact@v4
