@@ -53,9 +53,6 @@ jobs:
       - name: build
         run: pnpm run build
 
-      - name: install chromium
-        run: pnpm run chromium
-
       - name: install package revision
         run: pnpm i . -g
 

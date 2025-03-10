@@ -17,7 +17,6 @@ jobs:
         run: npm ci
       - name: build
         run: npm run build
-      - name: install chromium
-        run: npm run chromium
+
       - name: update fallback data
         run: npm run update
